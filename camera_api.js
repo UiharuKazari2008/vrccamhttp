@@ -110,12 +110,8 @@ app.get("/endpoint/getScreenshot", function(req, res) {
             } else {
                 if (req.query.nimage !== null && req.query.nimage !== undefined) {
                     const nImage = parseInt(req.query.nimage.substring(0, 2));
-                    console.log(nImage)
                     if (!isNaN(nImage) && nImage <= imageKeys.length - 1) {
                         const imageWanted = imageCache.get(imageKeys[nImage])
-                        console.log(imageWanted)
-                        console.log(imageCache.keys())
-                        console.log(imageKeys)
                         if (imageWanted !== undefined) {
                             res.contentType('image/png');
                             res.status(200).end(imageWanted, 'binary');
