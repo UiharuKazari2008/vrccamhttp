@@ -161,11 +161,11 @@ app.get('/', function (req, res) {
 // Handle Image Requests
 app.get("/endpoint/getImage", function(req, res) {
     res.contentType('image/jpeg');
-    if (req.query.type !== null && req.query.type !== undefined) {
+    if (req.query.query !== null && req.query.query !== undefined) {
         let wide = null;
-        if (req.query.type.substring(0,10) === "vrccam") {
+        if (req.query.query.substring(0,10) === "vrccam") {
             wide = true;
-        } else if (req.query.type.substring(0,10) === "pframe") {
+        } else if (req.query.query.substring(0,10) === "pframe") {
             wide = false;
         } else {
             wide = null;
@@ -174,7 +174,7 @@ app.get("/endpoint/getImage", function(req, res) {
         }
         if ( wide !== null && ready === true ) {
             if ( req.query.key !== undefined && "" + req.query.key.substring(0, 32) === global.LoginKey ) {
-                if ((req.query.type.substring(0,10) === "vrccam" && imageScreenshotKeys.length === 0) || (req.query.type.substring(0,10) === "pframe" && imageFrameKeys.length === 0)) {
+                if ((req.query.query.substring(0,10) === "vrccam" && imageScreenshotKeys.length === 0) || (req.query.query.substring(0,10) === "pframe" && imageFrameKeys.length === 0)) {
                     console.log("Not Ready, no data")
                     if (wide) {
                         res.status(200).end(defaultImages.get('wide-not-ready.jpg'), 'binary');
@@ -184,11 +184,11 @@ app.get("/endpoint/getImage", function(req, res) {
                 } else {
                     if (req.query.nimage !== null && req.query.nimage !== undefined) {
                         const nImage = parseInt(req.query.nimage.substring(0, 5));
-                        if ((!isNaN(nImage)) && ((req.query.type.substring(0,10) === "vrccam" && imageScreenshotKeys.length === 0 && nImage <= imageScreenshotKeys.length - 1) || (req.query.type.substring(0,10) === "pframe" && imageScreenshotKeys.length === 0 && nImage <= imageFrameKeys.length - 1))) {
+                        if ((!isNaN(nImage)) && ((req.query.query.substring(0,10) === "vrccam" && imageScreenshotKeys.length === 0 && nImage <= imageScreenshotKeys.length - 1) || (req.query.query.substring(0,10) === "pframe" && imageScreenshotKeys.length === 0 && nImage <= imageFrameKeys.length - 1))) {
                             let imageWanted = undefined;
-                            if (req.query.type.substring(0,10) === "vrccam") {
+                            if (req.query.query.substring(0,10) === "vrccam") {
                                 imageWanted = imageScreenshotCache.get(imageScreenshotKeys[nImage])
-                            } else if (req.query.type.substring(0,10) === "pframe") {
+                            } else if (req.query.query.substring(0,10) === "pframe") {
                                 imageWanted = imageFrameCache.get(imageFrameKeys[nImage])
                             }
 
@@ -211,9 +211,9 @@ app.get("/endpoint/getImage", function(req, res) {
                             }
                         }
                     } else {
-                        if (req.query.type.substring(0,10) === "vrccam") {
+                        if (req.query.query.substring(0,10) === "vrccam") {
                             res.status(200).end(imageScreenshotCache.get(imageScreenshotKeys[Math.floor(Math.random() * imageScreenshotKeys.length)]), 'binary');
-                        } else if (req.query.type.substring(0,10) === "pframe") {
+                        } else if (req.query.query.substring(0,10) === "pframe") {
                             res.status(200).end(imageFrameCache.get(imageFrameKeys[Math.floor(Math.random() * imageFrameKeys.length)]), 'binary');
                         }
 
