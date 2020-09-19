@@ -144,10 +144,10 @@ app.use(function(req, res, next) {
     next();
 });
 // Handle 404
-app.use(function(req, res) {
-    res.contentType('image/jpeg');
-    res.status(404).end(defaultImages.get('unknown.jpg'), 'binary');
-});
+//app.use(function(req, res) {
+//    res.contentType('image/jpeg');
+//    res.status(404).end(defaultImages.get('unknown.jpg'), 'binary');
+//});
 // Handle 500
 app.use(function(error, req, res, next) {
     res.contentType('image/jpeg');
