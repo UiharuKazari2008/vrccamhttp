@@ -32,7 +32,7 @@ console.log(defaultImages.keys())
 
 function refreshCache() {
     // Refresh Images from Discord
-    discordClient.getMessages(global.ChannelID, 30)
+    discordClient.getMessages(global.ChannelID, parseInt(global.NumImages))
         .then(function (messages) {
             let requests = messages.reduce((promiseChain, message) => {
                 return promiseChain.then(() => new Promise((resolve) => {
@@ -74,6 +74,7 @@ discordClient.on("ready", () => {
         .then(function(selfstatic) {
             console.log(`[Discord] User: ${selfstatic.username}(${selfstatic.id})`);
             refreshCache()
+            setInterval(refreshCache, 60000);
         })
         .catch((er) => {
             console.log(er);
@@ -99,6 +100,40 @@ app.get('/', function (req, res) {
     res.status(200).send('<b>BlackHeart API v0.1 - PERSONAL USE ONLY</b>')
 });
 app.get("/endpoint/getScreenshot", function(req, res) {
+    res.contentType('image/jpeg');
+    if ( ready === true ) {
+        if ( req.query.key !== undefined && "" + req.query.key.substring(0, 32) === global.LoginKey ) {
+            if (req.query.nimage !== null && req.query.nimage !== undefined) {
+                const nImage = parseInt(req.query.nimage.substring(0, 2));
+                console.log(nImage)
+                if (!isNaN(nImage) && nImage <= imageKeys.length - 1) {
+                    const imageWanted = imageCache.get(imageKeys[nImage])
+                    console.log(imageWanted)
+                    console.log(imageCache.keys())
+                    console.log(imageKeys)
+                    if (imageWanted !== undefined) {
+                        res.status(200).end(imageWanted, 'binary');
+                    } else {
+                        res.status(500).end(defaultImages.get('readfailed.png'), 'binary');
+                    }
+                } else {
+                    console.log("Returning a random image due to invalid number")
+                    res.status(200).end(imageCache.get(imageKeys[Math.floor(Math.random() * imageKeys.length)]), 'binary');
+                }
+            } else {
+                console.log("Returning a random image")
+                res.status(200).end(imageCache.get(imageKeys[Math.floor(Math.random() * imageKeys.length)]), 'binary');
+            }
+        } else {
+            console.log("Verification of World Failed")
+            res.status(200).end(defaultImages.get('loginerror.png'), 'binary');
+        }
+    } else {
+        console.log("Not Ready")
+        res.status(200).end(defaultImages.get('notready.png'), 'binary');
+    }
+});
+app.get("/endpoint/getPhotoFrame", function(req, res) {
     res.contentType('image/jpeg');
     if ( ready === true ) {
         if ( req.query.key !== undefined && "" + req.query.key.substring(0, 32) === global.LoginKey ) {
