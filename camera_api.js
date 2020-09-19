@@ -33,7 +33,7 @@ console.log(defaultImages.keys())
 function refreshCache() {
     // Refresh Images from Discord
     ready = false;
-    imageCache.clear();
+    let _imageKeysActive = [];
     discordClient.getMessages(global.ChannelID, parseInt(global.NumImages))
         .then(function (messages) {
             let requests = messages.reduce((promiseChain, message) => {
@@ -47,9 +47,11 @@ function refreshCache() {
                                     .then(res => res.buffer())
                                     .then(buffer => {
                                         imageCache.set(key, buffer);
+                                        _imageKeysActive.push(key);
                                         resolve2()
                                     })
                             } else {
+                                _imageKeysActive.push(key);
                                 resolve2()
                             }
                         }));
@@ -60,10 +62,13 @@ function refreshCache() {
             requests.then(() => {
                 imageKeys = []
                 imageCache.forEach(function(bufferdata, key) {
-                    imageKeys.push(key)
+                    if (_imageKeysActive.indexOf(key) === -1) {
+                        imageCache.delete(key)
+                    } else {
+                        imageKeys.push(key)
+                    }
                 })
                 ready = true
-
                 console.log(`Local Image Cache Is Ready! Loaded ${imageKeys.length} Images into Memory`)
             });
         })
