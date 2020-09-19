@@ -47,7 +47,6 @@ function refreshCache() {
                                     .then(res => res.buffer())
                                     .then(buffer => {
                                         imageCache.set(key, buffer);
-                                        _imageKeysActive.push(key);
                                         resolve2()
                                     })
                             } else {
