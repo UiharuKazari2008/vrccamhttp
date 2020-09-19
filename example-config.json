@@ -1,9 +1,9 @@
 {
   "APIKey": "",
-  "Screenshot-ChannelID": "",
-  "Screenshot-NumImages": "",
-  "FramePort-ChannelID": "",
-  "FramePort-NumImages": "",
+  "ScreenshotChannelID": "",
+  "ScreenshotNumImages": "",
+  "FramePortChannelID": "",
+  "FramePortNumImages": "",
   "LoginKey": ""
 
 }

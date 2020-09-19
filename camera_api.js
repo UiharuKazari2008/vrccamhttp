@@ -7,7 +7,7 @@ const path = require("path");
 const fs = require('fs')
 const fetch = require('node-fetch');
 const http = require('http').createServer(app).listen(9080);
-const global = require('./config.json');
+const global = require('./example-config.json');
 const discordClient = new eris.Client(global.APIKey, {
     compress: true,
     restMode: true,
@@ -37,7 +37,7 @@ function refreshCache() {
     ready = false;
     let _imageScreenshotKeysActive = [];
     let _imageFramesKeysActive = [];
-    discordClient.getMessages(global.Screenshot-ChannelID, parseInt(global.Screenshot-NumImages))
+    discordClient.getMessages(global.ScreenshotChannelID, parseInt(global.ScreenshotNumImages))
         .then(function (messages) {
             let requests = messages.reduce((promiseChain, message) => {
                 return promiseChain.then(() => new Promise((resolve) => {
@@ -75,7 +75,7 @@ function refreshCache() {
                 console.log(`Local Image Cache Is Ready! Loaded ${imageScreenshotKeys.length} Images into Memory`)
             });
         })
-    discordClient.getMessages(global.FramePort-ChannelID, parseInt(global.FramePort-NumImages))
+    discordClient.getMessages(global.FramePortChannelID, parseInt(global.FramePortNumImages))
         .then(function (messages) {
             let requests = messages.reduce((promiseChain, message) => {
                 return promiseChain.then(() => new Promise((resolve) => {
