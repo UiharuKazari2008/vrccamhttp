@@ -33,6 +33,7 @@ console.log(defaultImages.keys())
 function refreshCache() {
     // Refresh Images from Discord
     ready = false;
+    imageCache.clear();
     discordClient.getMessages(global.ChannelID, parseInt(global.NumImages))
         .then(function (messages) {
             let requests = messages.reduce((promiseChain, message) => {
@@ -40,13 +41,13 @@ function refreshCache() {
                     let requests2 = message.attachments.reduce((promiseChain2, image) => {
                         return promiseChain2.then(() => new Promise((resolve2) => {
                             const key = image.url.split('/').pop()
-                            console.log(`Loading Image "${key}" into cache...`)
                             if (imageKeys.indexOf(key) === -1) {
+                                console.log(`Loading Image "${key}" into cache...`)
                                 fetch(image.url)
                                     .then(res => res.buffer())
                                     .then(buffer => {
-                                        console.log(buffer)
-                                        imageCache.set(key, buffer)
+                                        imageCache.set(key, buffer);
+                                        _imageKeysActive.push(key);
                                         resolve2()
                                     })
                             } else {
