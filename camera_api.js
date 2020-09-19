@@ -7,7 +7,7 @@ const path = require("path");
 const fs = require('fs')
 const fetch = require('node-fetch');
 const http = require('http').createServer(app).listen(9080);
-const global = require('./example-config.json');
+const global = require('./config.json');
 const discordClient = new eris.Client(global.APIKey, {
     compress: true,
     restMode: true,
