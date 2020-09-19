@@ -103,7 +103,7 @@ app.use(function(req, res, next) {
     next();
 });
 app.get('/', function (req, res) {
-    res.status(200).send('<b>BlackHeart API v0.1 - PERSONAL USE ONLY</b>')
+    res.status(200).send('<b>BlackHeart API2 v0.2 - PERSONAL USE ONLY</b>')
 });
 app.get("/endpoint/getScreenshot", function(req, res) {
     res.contentType('image/jpeg');
@@ -114,7 +114,7 @@ app.get("/endpoint/getScreenshot", function(req, res) {
                 res.status(200).end(defaultImages.get('not-ready.jpg'), 'binary');
             } else {
                 if (req.query.nimage !== null && req.query.nimage !== undefined) {
-                    const nImage = parseInt(req.query.nimage.substring(0, 2));
+                    const nImage = parseInt(req.query.nimage.substring(0, 5));
                     if (!isNaN(nImage) && nImage <= imageKeys.length - 1) {
                         const imageWanted = imageCache.get(imageKeys[nImage])
                         if (imageWanted !== undefined) {
@@ -128,7 +128,6 @@ app.get("/endpoint/getScreenshot", function(req, res) {
                         res.status(404).end(defaultImages.get('not-found.jpg'), 'binary');
                     }
                 } else {
-                    console.log("Returning a random image")
                     res.status(200).end(imageCache.get(imageKeys[Math.floor(Math.random() * imageKeys.length)]), 'binary');
                 }
             }
