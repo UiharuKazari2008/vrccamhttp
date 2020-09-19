@@ -95,10 +95,10 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, User-Agent");
     next();
 });
-app.get('/', function (req, res, next) {
+app.get('/', function (req, res) {
     res.status(200).send('<b>BlackHeart API v0.1 - PERSONAL USE ONLY</b>')
 });
-app.get("/endpoint/getScreenshot", function(req, res, next) {
+app.get("/endpoint/getScreenshot", function(req, res) {
     res.contentType('image/jpeg');
     if ( ready === true ) {
         if ( req.query.key !== undefined && "" + req.query.key.substring(0, 32) === global.LoginKey ) {
