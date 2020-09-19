@@ -112,13 +112,14 @@ app.get("/endpoint/getScreenshot", function(req, res) {
                     console.log(imageCache.keys())
                     console.log(imageKeys)
                     if (imageWanted !== undefined) {
+                        res.contentType('image/png');
                         res.status(200).end(imageWanted, 'binary');
                     } else {
-                        res.status(500).end(defaultImages.get('readfailed.png'), 'binary');
+                        res.status(500).end(defaultImages.get('read-failed.jpg'), 'binary');
                     }
                 } else {
-                    console.log("Returning a random image due to invalid number")
-                    res.status(200).end(imageCache.get(imageKeys[Math.floor(Math.random() * imageKeys.length)]), 'binary');
+                    console.log("Invalid Request")
+                    res.status(404).end(defaultImages.get('not-found.jpg'), 'binary');
                 }
             } else {
                 console.log("Returning a random image")
@@ -126,44 +127,10 @@ app.get("/endpoint/getScreenshot", function(req, res) {
             }
         } else {
             console.log("Verification of World Failed")
-            res.status(200).end(defaultImages.get('loginerror.png'), 'binary');
+            res.status(200).end(defaultImages.get('old-key.jpg'), 'binary');
         }
     } else {
         console.log("Not Ready")
-        res.status(200).end(defaultImages.get('notready.png'), 'binary');
-    }
-});
-app.get("/endpoint/getPhotoFrame", function(req, res) {
-    res.contentType('image/jpeg');
-    if ( ready === true ) {
-        if ( req.query.key !== undefined && "" + req.query.key.substring(0, 32) === global.LoginKey ) {
-            if (req.query.nimage !== null && req.query.nimage !== undefined) {
-                const nImage = parseInt(req.query.nimage.substring(0, 2));
-                console.log(nImage)
-                if (!isNaN(nImage) && nImage <= imageKeys.length - 1) {
-                    const imageWanted = imageCache.get(imageKeys[nImage])
-                    console.log(imageWanted)
-                    console.log(imageCache.keys())
-                    console.log(imageKeys)
-                    if (imageWanted !== undefined) {
-                        res.status(200).end(imageWanted, 'binary');
-                    } else {
-                        res.status(500).end(defaultImages.get('readfailed.png'), 'binary');
-                    }
-                } else {
-                    console.log("Returning a random image due to invalid number")
-                    res.status(200).end(imageCache.get(imageKeys[Math.floor(Math.random() * imageKeys.length)]), 'binary');
-                }
-            } else {
-                console.log("Returning a random image")
-                res.status(200).end(imageCache.get(imageKeys[Math.floor(Math.random() * imageKeys.length)]), 'binary');
-            }
-        } else {
-            console.log("Verification of World Failed")
-            res.status(200).end(defaultImages.get('loginerror.png'), 'binary');
-        }
-    } else {
-        console.log("Not Ready")
-        res.status(200).end(defaultImages.get('notready.png'), 'binary');
+        res.status(200).end(defaultImages.get('not-ready.jpg'), 'binary');
     }
 });
