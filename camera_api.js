@@ -12,7 +12,9 @@ const discordClient = new eris.Client(global.APIKey, {
     compress: true,
     restMode: true,
 });
-let ready = false;
+let ready1 = false;
+let ready2 = false;
+let frameCycle = 0;
 
 let imageScreenshotCache = new Map();
 let imageFrameCache = new Map();
@@ -34,7 +36,8 @@ console.log(defaultImages.keys())
 
 function refreshCache() {
     // Refresh Images from Discord
-    ready = false;
+    ready1 = false;
+    ready2 = false;
     let _imageScreenshotKeysActive = [];
     let _imageFramesKeysActive = [];
     discordClient.getMessages(global.ScreenshotChannelID, parseInt(global.ScreenshotNumImages))
@@ -71,7 +74,7 @@ function refreshCache() {
                         imageScreenshotKeys.push(key)
                     }
                 })
-                ready = true
+                ready1 = true
                 console.log(`Local Image Cache Is Ready! Loaded ${imageScreenshotKeys.length} Images into Memory`)
             });
         })
@@ -109,7 +112,7 @@ function refreshCache() {
                         imageFrameKeys.push(key)
                     }
                 })
-                ready = true
+                ready2 = true
                 console.log(`Local Image Cache Is Ready! Loaded ${imageFrameKeys.length} Images into Memory`)
             });
         })
@@ -172,7 +175,7 @@ app.get("/endpoint/getImage", function(req, res) {
             console.log("Invalid Request Type")
             res.status(404).end(defaultImages.get('unknown.jpg'), 'binary');
         }
-        if ( wide !== null && ready === true ) {
+        if ( wide !== null && ((req.query.query.substring(0,10) === "vrccam" && ready1 === true) || (req.query.query.substring(0,10) === "pframe" && ready2 === true)) ) {
             if ( req.query.key !== undefined && "" + req.query.key.substring(0, 32) === global.LoginKey ) {
                 if ((req.query.query.substring(0,10) === "vrccam" && imageScreenshotKeys.length === 0) || (req.query.query.substring(0,10) === "pframe" && imageFrameKeys.length === 0)) {
                     console.log("Not Ready, no data")
@@ -214,7 +217,11 @@ app.get("/endpoint/getImage", function(req, res) {
                         if (req.query.query.substring(0,10) === "vrccam") {
                             res.status(200).end(imageScreenshotCache.get(imageScreenshotKeys[Math.floor(Math.random() * imageScreenshotKeys.length)]), 'binary');
                         } else if (req.query.query.substring(0,10) === "pframe") {
-                            res.status(200).end(imageFrameCache.get(imageFrameKeys[Math.floor(Math.random() * imageFrameKeys.length)]), 'binary');
+                            if (frameCycle > imageFrameKeys.length) {
+                                frameCycle = 0;
+                            }
+                            res.status(200).end(imageFrameCache.get(imageFrameKeys[frameCycle]), 'binary');
+                            frameCycle++;
                         }
 
                     }
