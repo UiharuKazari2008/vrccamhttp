@@ -184,7 +184,7 @@ app.get("/endpoint/getImage", function(req, res) {
                 } else {
                     if (req.query.nimage !== null && req.query.nimage !== undefined) {
                         const nImage = parseInt(req.query.nimage.substring(0, 5));
-                        if ((!isNaN(nImage)) && ((req.query.query.substring(0,10) === "vrccam" && imageScreenshotKeys.length === 0 && nImage <= imageScreenshotKeys.length - 1) || (req.query.query.substring(0,10) === "pframe" && imageFrameKeys.length === 0 && nImage <= imageFrameKeys.length - 1))) {
+                        if ((!isNaN(nImage)) && ((req.query.query.substring(0,10) === "vrccam" && imageScreenshotKeys.length !== 0 && nImage <= imageScreenshotKeys.length - 1) || (req.query.query.substring(0,10) === "pframe" && imageFrameKeys.length !== 0 && nImage <= imageFrameKeys.length - 1))) {
                             let imageWanted = undefined;
                             if (req.query.query.substring(0,10) === "vrccam") {
                                 imageWanted = imageScreenshotCache.get(imageScreenshotKeys[nImage])
