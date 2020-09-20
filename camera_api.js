@@ -217,7 +217,7 @@ app.get("/endpoint/getImage", function(req, res) {
                         if (req.query.query.substring(0,10) === "vrccam") {
                             res.status(200).end(imageScreenshotCache.get(imageScreenshotKeys[Math.floor(Math.random() * imageScreenshotKeys.length)]), 'binary');
                         } else if (req.query.query.substring(0,10) === "pframe") {
-                            if (frameCycle > imageFrameKeys.length) {
+                            if (frameCycle > imageFrameKeys.length - 1) {
                                 frameCycle = 0;
                             }
                             res.status(200).end(imageFrameCache.get(imageFrameKeys[frameCycle]), 'binary');
