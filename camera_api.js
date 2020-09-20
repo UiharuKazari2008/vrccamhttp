@@ -55,8 +55,6 @@ console.log(defaultImages.keys())
 
 function refreshCache() {
     // Refresh Images from Discord
-    ready1 = false;
-    ready2 = false;
     let _imageScreenshotKeysActive = [];
     let _imageFramesKeysActive = [];
     discordClient.getMessages(global.ScreenshotChannelID, parseInt(global.ScreenshotNumImages))
